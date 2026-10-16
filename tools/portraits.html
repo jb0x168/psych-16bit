@@ -1,0 +1,33 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>portraits</title>
+<style>body{margin:0;background:#222}canvas{image-rendering:pixelated;display:block}</style></head>
+<body>
+<canvas id="c"></canvas>
+<script src="../src/engine/core.js"></script>
+<script src="../src/engine/gfx.js"></script>
+<script src="../src/engine/font.js"></script>
+<script src="../src/engine/sprites.js"></script>
+<script src="../src/engine/portraits.js"></script>
+<script src="../src/world/cast.js"></script>
+<script>
+const q = new URLSearchParams(location.search);
+for (const s of (q.get('extra') || '').split(',').filter(Boolean)) { const sc = document.createElement('script'); sc.src = s; document.body.appendChild(sc); }
+setTimeout(() => {
+  const S = +(q.get('s') || 3);
+  const ids = (q.get('ids') || 'shawn,gus,lassiter,juliet,vick,henry,mcnab,woody,youngshawn,younghenry').split(',');
+  const ex = (q.get('ex') || 'neutral,happy,smug,angry,surprised,sad,closed,neutral:talk,neutral:blink').split(',');
+  const cw = 52, chh = 60;
+  const W = 60 + cw * ex.length, H = chh * ids.length;
+  const c = document.getElementById('c'); c.width = W; c.height = H; c.style.width = W * S + 'px'; c.style.height = H * S + 'px';
+  const x = c.getContext('2d'); x.imageSmoothingEnabled = false;
+  ids.forEach((id, r) => {
+    P.font.draw(x, id, 2, r * chh + 4, '#fff');
+    ex.forEach((e, i) => {
+      const [name, mod] = e.split(':');
+      const p = P.Portrait.get(id, name, { talk: mod === 'talk', blink: mod === 'blink' });
+      if (p) x.drawImage(p, 60 + i * cw, r * chh + 2);
+    });
+  });
+}, 200);
+</script>
+</body></html>
