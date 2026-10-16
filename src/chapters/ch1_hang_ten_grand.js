@@ -332,6 +332,14 @@
       // finale extras
       { id: 'vick', x: 386, y: 146, face: 'left', show: (g) => g.flag('finale_pending'), talk: (g) => talkVickBeach(g) },
       { id: 'dewey', x: 430, y: 146, face: 'left', show: (g) => g.flag('finale_pending'), talk: (g) => g.say('dewey', 'Dude. This is SO much better than Galaxy Surfer.') },
+      { id: 'deweystand', cast: 'dewey', name: 'Dewey', x: 510, y: 150, face: 'left', show: (g) => g.flag('dewey_back') && !g.flag('finale_pending'),
+        talk: async (g) => {
+          await g.topics('dewey', [
+            { id: 'suit2', label: 'Where did you leave the Tiki suit?', run: async (gg) => { await gg.say('dewey', "Judges' tent. Ten o'clock. On the hook. Gil was weirdly intense about it."); await gg.clue('costume_left'); } },
+            { id: 'work', label: 'Back at work, huh?', run: async (gg) => { await gg.say('dewey', "Auntie says I'm on register duty until I'm thirty. Worth it. D-E-W, baby."); } },
+          ], { title: 'Dewey' });
+        },
+        observe: (g) => g.say('shawn', "He's wearing an apron over the hoodie now. Grounded, but triumphant.") },
     ],
     onEnter: async (g, o) => {
       if (g.flag('finale_pending') && !g.flag('finale_started')) return finale(g);
@@ -866,6 +874,10 @@
     await g.say('dewey', "Here. Eight hundred tickets. Prize counter's over there. And... yeah. I'll go see Auntie. Tell her I'm sorry about the suit.");
     await g.item('tickets');
     await g.say('dewey', "Oh, and if you find Tiki Tom? Tell him I'm sorry too.");
+    if (!g.hasClue('costume_left')) {
+      await g.say('dewey', "I left him right where Gil told me. On the hook in the judges' tent, ten o'clock sharp. Gil was super specific about it.");
+      await g.clue('costume_left');
+    }
     g.set('dewey_back');
     await g.walk('dewey', 10, 150);
     g.remove('dewey');

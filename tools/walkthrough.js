@@ -315,6 +315,33 @@
     T.expect(P.game.mode.constructor.name === 'Complete', 'template: case closed');
   };
 
+  T.sneak = async () => {
+    try { localStorage.clear(); } catch (e) { /* ignore */ }
+    P.audio.unlock();
+    const st = P.game.newState('ch1'); Object.assign(st.flags, { c1_intro: 1, beach_intro: 1 }); st.scene = 'beach'; st.px = 200; st.py = 156;
+    await P.game.startChapter('ch1', { state: st });
+    await T.idle();
+    P.timeScale = 1;
+    const mc = P.game.scene.actors.mcnab;
+    const waitFace = async (f, minLeft) => { for (let i = 0; i < 400; i++) { const gd = mc.guard; if (mc.face === f && gd.timer > minLeft) return; await sleep(25); } T.fail('guard never faced ' + f); };
+    // 1) walk in while he is watching -> caught
+    await waitFace(-1, 2.2);
+    await T.act('tentflap', 'use');
+    T.expect(P.game.scene.id === 'beach', 'caught while McNab watches (still on the beach)');
+    // 2) wait for his back to turn -> slip in
+    await waitFace(1, 2.0);
+    await T.act('tentflap', 'use');
+    T.expect(P.game.scene.id === 'tent', 'slipped into the tent while McNab watched the surf');
+    T.expect(T.flag('sneaked'), 'sneak flag set');
+    // 3) the softlock fix: quarters before asking about the suit still yields costume_left
+    const st2 = P.game.newState('ch1'); Object.assign(st2.flags, { c1_intro: 1, beach_intro: 1, hired: 1, pier_known: 1, met_dewey: 1, dewey_found: 1, dewey_needs_quarters: 1 }); st2.items = ['quarters']; st2.scene = 'arcade'; st2.px = 60; st2.py = 152;
+    P.timeScale = 6;
+    await P.game.startChapter('ch1', { state: st2 });
+    await T.idle();
+    await T.act('dewey', 'use', ['__present'], ['quarters']);
+    T.expect(T.hasClue('costume_left'), 'Dewey still tells you where he left the suit');
+  };
+
   T.run = async (name) => {
     try { await T[name](); } catch (e) { T.fail('exception: ' + (e && e.stack || e)); }
     return { errors: T.errors, log: T.log };

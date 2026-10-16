@@ -593,8 +593,8 @@ window.P = window.P || {};
   A.applyVolume = function () {
     if (!A.ready) return;
     const s = A.settings;
-    A.musicGain.gain.value = s.muted ? 0 : s.music * 0.6;
-    A.sfxGain.gain.value = s.muted ? 0 : s.sfx * 0.7;
+    A.musicGain.gain.value = s.muted ? 0 : s.music * 0.95;
+    A.sfxGain.gain.value = s.muted ? 0 : s.sfx * 1.0;
     P.store.set('psych16_audio', s);
   };
   A.toggleMute = function () { A.settings.muted = !A.settings.muted; A.applyVolume(); return A.settings.muted; };
@@ -5052,6 +5052,7 @@ window.P = window.P || {};
         ['Snacks eaten', `${s.snacks.length} / ${new Set(Object.keys(ch.snacks).concat(Object.keys(P.world.snacks))).size}`],
         ['Wrong visions', `${s.wrongPresents || 0}`],
         ['Calls to Dad', `${s.hintsUsed || 0}`],
+        ['New names for Gus', `${(s.nicknamesUsed || []).length}`],
       ];
       const score = s.clues.length * 2 + s.snacks.length + (game.global.romance || 0) - (s.wrongPresents || 0) - (s.hintsUsed || 0);
       this.rank = score >= 26 ? 'ACTUAL PSYCHIC (?!)' : score >= 20 ? 'Senior Fake Psychic' : score >= 13 ? 'Junior Fake Psychic' : 'Still Better Than Lassie';
@@ -5071,19 +5072,19 @@ window.P = window.P || {};
       const s = Math.min(1, t / 0.4);
       F().draw(x, 'CASE CLOSED', 160, 14 + (1 - U.ease.outBack(s)) * -30, '#fee761', { align: 'center', scale: 3, outline: '#0e0a14' });
       F().draw(x, `Case ${ch.number}: ${ch.title}`, 160, 44, '#ffffff', { align: 'center', outline: '#0e0a14' });
-      UI.panel(x, 50, 58, 220, 84);
+      UI.panel(x, 50, 56, 220, 92);
       this.rows.forEach(([a, b], i) => { if (t > 0.5 + i * 0.15) { F().draw(x, a, 60, 66 + i * 11, '#c8c0f0'); F().draw(x, b, 260, 66 + i * 11, '#ffffff', { align: 'right' }); } });
       if (t > 1.3) {
-        F().draw(x, 'Juliet:', 60, 124, '#ff8ab8');
+        F().draw(x, 'Juliet:', 60, 134, '#ff8ab8');
         const r = Math.min(10, this.game.global.romance || 0);
-        for (let i = 0; i < 10; i++) G.heart(x, 96 + i * 9, 124, i < r ? '#ff4a7a' : '#4a3a7a', i < r ? '#ffd0dc' : '#5a4a8a');
+        for (let i = 0; i < 10; i++) G.heart(x, 96 + i * 9, 134, i < r ? '#ff4a7a' : '#4a3a7a', i < r ? '#ffd0dc' : '#5a4a8a');
       }
-      if (t > 1.6) F().draw(x, 'RANK: ' + this.rank, 160, 148, ACC, { align: 'center', outline: '#0e0a14' });
-      if (t > 2) F().draw(x, 'Did you spot the pineapple?', 160, 160, '#fee761', { align: 'center' });
+      if (t > 1.6) F().draw(x, 'RANK: ' + this.rank, 160, 151, ACC, { align: 'center', outline: '#0e0a14' });
+      if (t > 2) F().draw(x, 'Did you spot the pineapple?', 160, 161, '#fee761', { align: 'center' });
       const last = P.chapterList.indexOf(ch.id) === P.chapterList.length - 1;
       if (last && t > 2.4) { UI.panel(x, 34, 4, 252, 10, { accent: ACC }); }
       if (last && t > 2.4) F().draw(x, 'SEASON FINALE! Thanks for playing. More cases soon.', 160, 6, ACC, { align: 'center' });
-      if (t > 2.2 && Math.floor(t * 2) % 2 === 0) F().draw(x, 'PRESS ENTER', 160, 170, '#c8c0f0', { align: 'center' });
+      if (t > 2.2 && Math.floor(t * 2) % 2 === 0) F().draw(x, 'PRESS ENTER', 160, 171, '#c8c0f0', { align: 'center' });
     }
   }
 
@@ -6192,6 +6193,14 @@ window.P = window.P || {};
       // finale extras
       { id: 'vick', x: 386, y: 146, face: 'left', show: (g) => g.flag('finale_pending'), talk: (g) => talkVickBeach(g) },
       { id: 'dewey', x: 430, y: 146, face: 'left', show: (g) => g.flag('finale_pending'), talk: (g) => g.say('dewey', 'Dude. This is SO much better than Galaxy Surfer.') },
+      { id: 'deweystand', cast: 'dewey', name: 'Dewey', x: 510, y: 150, face: 'left', show: (g) => g.flag('dewey_back') && !g.flag('finale_pending'),
+        talk: async (g) => {
+          await g.topics('dewey', [
+            { id: 'suit2', label: 'Where did you leave the Tiki suit?', run: async (gg) => { await gg.say('dewey', "Judges' tent. Ten o'clock. On the hook. Gil was weirdly intense about it."); await gg.clue('costume_left'); } },
+            { id: 'work', label: 'Back at work, huh?', run: async (gg) => { await gg.say('dewey', "Auntie says I'm on register duty until I'm thirty. Worth it. D-E-W, baby."); } },
+          ], { title: 'Dewey' });
+        },
+        observe: (g) => g.say('shawn', "He's wearing an apron over the hoodie now. Grounded, but triumphant.") },
     ],
     onEnter: async (g, o) => {
       if (g.flag('finale_pending') && !g.flag('finale_started')) return finale(g);
@@ -6726,6 +6735,10 @@ window.P = window.P || {};
     await g.say('dewey', "Here. Eight hundred tickets. Prize counter's over there. And... yeah. I'll go see Auntie. Tell her I'm sorry about the suit.");
     await g.item('tickets');
     await g.say('dewey', "Oh, and if you find Tiki Tom? Tell him I'm sorry too.");
+    if (!g.hasClue('costume_left')) {
+      await g.say('dewey', "I left him right where Gil told me. On the hook in the judges' tent, ten o'clock sharp. Gil was super specific about it.");
+      await g.clue('costume_left');
+    }
     g.set('dewey_back');
     await g.walk('dewey', 10, 150);
     g.remove('dewey');

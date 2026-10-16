@@ -51,8 +51,8 @@
   A.applyVolume = function () {
     if (!A.ready) return;
     const s = A.settings;
-    A.musicGain.gain.value = s.muted ? 0 : s.music * 0.6;
-    A.sfxGain.gain.value = s.muted ? 0 : s.sfx * 0.7;
+    A.musicGain.gain.value = s.muted ? 0 : s.music * 0.95;
+    A.sfxGain.gain.value = s.muted ? 0 : s.sfx * 1.0;
     P.store.set('psych16_audio', s);
   };
   A.toggleMute = function () { A.settings.muted = !A.settings.muted; A.applyVolume(); return A.settings.muted; };

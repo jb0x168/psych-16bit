@@ -410,6 +410,7 @@
         ['Snacks eaten', `${s.snacks.length} / ${new Set(Object.keys(ch.snacks).concat(Object.keys(P.world.snacks))).size}`],
         ['Wrong visions', `${s.wrongPresents || 0}`],
         ['Calls to Dad', `${s.hintsUsed || 0}`],
+        ['New names for Gus', `${(s.nicknamesUsed || []).length}`],
       ];
       const score = s.clues.length * 2 + s.snacks.length + (game.global.romance || 0) - (s.wrongPresents || 0) - (s.hintsUsed || 0);
       this.rank = score >= 26 ? 'ACTUAL PSYCHIC (?!)' : score >= 20 ? 'Senior Fake Psychic' : score >= 13 ? 'Junior Fake Psychic' : 'Still Better Than Lassie';
@@ -429,19 +430,19 @@
       const s = Math.min(1, t / 0.4);
       F().draw(x, 'CASE CLOSED', 160, 14 + (1 - U.ease.outBack(s)) * -30, '#fee761', { align: 'center', scale: 3, outline: '#0e0a14' });
       F().draw(x, `Case ${ch.number}: ${ch.title}`, 160, 44, '#ffffff', { align: 'center', outline: '#0e0a14' });
-      UI.panel(x, 50, 58, 220, 84);
+      UI.panel(x, 50, 56, 220, 92);
       this.rows.forEach(([a, b], i) => { if (t > 0.5 + i * 0.15) { F().draw(x, a, 60, 66 + i * 11, '#c8c0f0'); F().draw(x, b, 260, 66 + i * 11, '#ffffff', { align: 'right' }); } });
       if (t > 1.3) {
-        F().draw(x, 'Juliet:', 60, 124, '#ff8ab8');
+        F().draw(x, 'Juliet:', 60, 134, '#ff8ab8');
         const r = Math.min(10, this.game.global.romance || 0);
-        for (let i = 0; i < 10; i++) G.heart(x, 96 + i * 9, 124, i < r ? '#ff4a7a' : '#4a3a7a', i < r ? '#ffd0dc' : '#5a4a8a');
+        for (let i = 0; i < 10; i++) G.heart(x, 96 + i * 9, 134, i < r ? '#ff4a7a' : '#4a3a7a', i < r ? '#ffd0dc' : '#5a4a8a');
       }
-      if (t > 1.6) F().draw(x, 'RANK: ' + this.rank, 160, 148, ACC, { align: 'center', outline: '#0e0a14' });
-      if (t > 2) F().draw(x, 'Did you spot the pineapple?', 160, 160, '#fee761', { align: 'center' });
+      if (t > 1.6) F().draw(x, 'RANK: ' + this.rank, 160, 151, ACC, { align: 'center', outline: '#0e0a14' });
+      if (t > 2) F().draw(x, 'Did you spot the pineapple?', 160, 161, '#fee761', { align: 'center' });
       const last = P.chapterList.indexOf(ch.id) === P.chapterList.length - 1;
       if (last && t > 2.4) { UI.panel(x, 34, 4, 252, 10, { accent: ACC }); }
       if (last && t > 2.4) F().draw(x, 'SEASON FINALE! Thanks for playing. More cases soon.', 160, 6, ACC, { align: 'center' });
-      if (t > 2.2 && Math.floor(t * 2) % 2 === 0) F().draw(x, 'PRESS ENTER', 160, 170, '#c8c0f0', { align: 'center' });
+      if (t > 2.2 && Math.floor(t * 2) % 2 === 0) F().draw(x, 'PRESS ENTER', 160, 171, '#c8c0f0', { align: 'center' });
     }
   }
 
