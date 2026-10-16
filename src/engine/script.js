@@ -199,6 +199,16 @@
       return this.scene.addActor(d);
     }
     remove(id) { if (this.scene) this.scene.removeActor(id); }
+    // re-create an actor from the scene definition (restores talk handlers) at its current spot
+    respawn(id) {
+      const sc = this.scene; if (!sc) return;
+      const cur = sc.actors[id];
+      const d = (sc.def.actors || []).find((a) => a.id === id);
+      if (!d) return;
+      sc.removeActor(id);
+      const a = sc.addActor(Object.assign({}, d, cur ? { x: cur.x, y: cur.y, face: cur.face < 0 ? 'left' : 'right' } : {}));
+      return a;
+    }
     show(id, v = true) { const a = this.actor(id); if (a) a.visible = v; }
     place(id, x, y, face) { const a = this.actor(id); if (!a) return; a.stop(); a.x = x; if (y != null) a.y = y; if (face) this.face(id, face); }
     async hop(id, h = 8) {

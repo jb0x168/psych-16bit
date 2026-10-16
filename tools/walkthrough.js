@@ -25,7 +25,7 @@
   };
   P.debugMap = () => T.mapTo;
 
-  T.idle = async (timeout = 9000) => {
+  T.idle = async (timeout = (P.timeScale < 3 ? 60000 : 9000)) => {
     const t0 = Date.now();
     await sleep(30);
     while (Date.now() - t0 < timeout) {
@@ -217,6 +217,86 @@
     await T.idle(60000);
     T.expect(P.game.mode.constructor.name === 'Complete', 'chapter 2 complete');
     T.expect(T.flag('jules_ferris'), 'Juliet ferris wheel (romance >= 4)');
+  };
+
+  T.ch3 = async () => {
+    await T.start('ch3', ['The right one']);
+    P.game.global.romance = 4; // as if cases 1-2 went fairly well
+    T.expect(P.game.scene.id === 'office', 'office after cold open');
+    T.expect(T.flag('memory_ok'), 'fog memory test');
+    await T.act('tv', 'look');
+    await T.travel('foyer');
+    T.expect(T.flag('manor_arrive'), 'arrived at manor');
+    await T.act('hargrove', 'use', ["Who's here", 'sapphire']);
+    await T.act('ozera', 'use', ['real psychic']);
+    await T.act('dolores', 'look');
+    await T.act('pemberton', 'use', ['polished', "How's business"]);
+    await T.act('preston', 'use', ['golf', 'sell the house']);
+    await T.act('dolores', 'use', ['Tell me about the sapphire', 'Why a seance', "start the seance"]);
+    T.expect(T.flag('seance_done'), 'seance + blackout');
+    T.expect(P.game.scene.id === 'foyer', 'back in foyer with police');
+    await T.act('lassiter', 'use', ['Still think it was Ozera']);
+    await T.act('juliet', 'use', ['What do we know']);
+    await T.act('guestbook', 'look');
+    T.expect(T.hasClue('guest_log'), 'guest log');
+    await T.act('stairs', 'use');
+    T.expect(P.game.scene.id === 'foyer', 'Lassiter blocks the stairs');
+    await T.act('kitchen', 'use');
+    await T.act('rosa', 'use', ['no such thing']);
+    await T.act('dumbwaiter', 'use');
+    T.expect(P.game.scene.id === 'kitchen', 'Gus refuses without a bribe');
+    await T.act('jar', 'use');
+    await T.act('dumbwaiter', 'use');
+    T.expect(P.game.scene.id === 'basement', 'Gus in the basement');
+    T.expect(P.game.scene.actors.shawn.cast === 'gus', 'playing as Gus');
+    await T.act('trunk', 'look'); await T.act('wine', 'look');
+    await T.act('fusebox', 'look');
+    T.expect(T.hasClue('blackout_timer'), 'timer found');
+    await T.act('up', 'use');
+    T.expect(P.game.scene.id === 'kitchen' && P.game.scene.actors.shawn.cast === 'shawn', 'back as Shawn');
+    await T.act('rosa', 'use', ['cleanse', 'Interpretive dance', 'Sprinkle Gus']);
+    T.expect(T.flag('rosa_calm'), 'Rosa calmed');
+    await T.act('rosa', 'use', ['Preston', 'handle the sapphire']);
+    T.expect(T.hasClue('pemberton_alone'), 'Pemberton alone clue');
+    await T.act('out', 'use');
+    // distraction route upstairs (before being hired)
+    await T.act('gus', 'use', ['distract Lassiter', 'feelings']);
+    await T.act('gus', 'use', ['distract Lassiter', 'ghost']);
+    T.expect(T.flag('lassiter_away'), 'Lassiter distracted');
+    await T.act('stairs', 'use');
+    T.expect(P.game.scene.id === 'preston', 'upstairs via distraction');
+    await T.act('timerbox', 'look'); await T.act('bed', 'look');
+    await T.act('golfbag', 'look');
+    T.expect(T.hasClue('necklace_found'), 'necklace found');
+    await T.act('golfbag', 'use', ['light']);
+    await T.act('golfbag', 'use', ['fog']);
+    T.expect(T.hasClue('fog_test'), 'fog test');
+    await T.act('down', 'use');
+    T.expect(!T.flag('lassiter_away'), 'Lassiter back');
+    await T.act('vick', 'use', ['having a vision'], ['ozera_record', 'blackout_timer', 'guest_log']);
+    T.expect(T.flag('hired'), 'hired');
+    await T.act('ozera', 'use', []);
+    T.expect(P.game.state.gifts.includes('tarot'), 'tarot gift');
+    await T.act('closet', 'look');
+    await T.act('pemberton', 'look');
+    T.expect(T.hasClue('pemberton_broke') && T.hasClue('thick_watch'), 'Pemberton clues');
+    await T.act('library', 'use');
+    await T.act('hargrove', 'use', []);
+    await T.act('gus', 'use', ['concussion']);
+    await T.act('hargrove', 'use', ['__present'], ['salts']);
+    T.expect(T.flag('hargrove_awake'), 'Hargrove awake');
+    await T.act('hargrove', 'use', ['What happened in the dark']);
+    await T.act('poems', 'look');
+    await T.act('out', 'use');
+    await T.act('parlor', 'use');
+    await T.act('table', 'look'); await T.act('canapes', 'use');
+    await T.act('out', 'use');
+    for (const gft of ['cameo', 'tarot', 'pressedrose']) await T.act('juliet', 'use', ['__gift'], [gft]);
+    T.expect((P.game.global.romance || 0) >= 6, 'romance >= 6');
+    await T.act('vick', 'use', ['seance of my own'], ['timer_set', 'fog_test', 'pemberton_alone', 'pemberton_broke', 'thick_watch']);
+    await T.idle(60000);
+    T.expect(P.game.mode.constructor.name === 'Complete', 'chapter 3 complete');
+    T.expect(T.flag('jules_umbrella'), 'umbrella moment');
   };
 
   T.run = async (name) => {

@@ -78,6 +78,7 @@
       this.chapterCast = {};
       for (const [cid, def] of Object.entries(ch.cast || {})) { P.defineCast(cid, def); }
       this.state = o.state || this.newState(id);
+      if (ch.onLoad) { try { ch.onLoad(this.g); } catch (e) { console.error(e); } }
       this.ui = []; this.toasts = []; this.vision = false; this.cutscene = 0;
       this.mode = new Play(this);
       this.scene = null;
@@ -406,7 +407,7 @@
       this.rows = [
         ['Clues found', `${s.clues.length} / ${Object.keys(ch.clues).length}`],
         ['Gifts found for Juliet', `${(game.global.giftsGiven || []).filter((g) => ch.gifts[g]).length + s.gifts.length} / ${Object.keys(ch.gifts).length}`],
-        ['Snacks eaten', `${s.snacks.length} / ${Object.keys(ch.snacks).length}`],
+        ['Snacks eaten', `${s.snacks.length} / ${new Set(Object.keys(ch.snacks).concat(Object.keys(P.world.snacks))).size}`],
         ['Wrong visions', `${s.wrongPresents || 0}`],
         ['Calls to Dad', `${s.hintsUsed || 0}`],
       ];
@@ -437,6 +438,9 @@
       }
       if (t > 1.6) F().draw(x, 'RANK: ' + this.rank, 160, 148, ACC, { align: 'center', outline: '#0e0a14' });
       if (t > 2) F().draw(x, 'Did you spot the pineapple?', 160, 160, '#fee761', { align: 'center' });
+      const last = P.chapterList.indexOf(ch.id) === P.chapterList.length - 1;
+      if (last && t > 2.4) { UI.panel(x, 34, 4, 252, 10, { accent: ACC }); }
+      if (last && t > 2.4) F().draw(x, 'SEASON FINALE! Thanks for playing. More cases soon.', 160, 6, ACC, { align: 'center' });
       if (t > 2.2 && Math.floor(t * 2) % 2 === 0) F().draw(x, 'PRESS ENTER', 160, 170, '#c8c0f0', { align: 'center' });
     }
   }

@@ -17,5 +17,7 @@
     const hot = window.claude && window.claude.hot;
     if (hot && hot.snapshot) hot.snapshot(() => { try { game.autosave(); } catch (e) { /* ignore */ } return {}; });
   };
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+  // inside the artifact viewer, boot through the live-update hook so state survives republishes
+  const start = () => { const hot = window.claude && window.claude.hot; if (hot && hot.ready) hot.ready(boot); else boot(); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })(window.P);

@@ -183,17 +183,17 @@
       if (st0.aura) { x.save(); for (let i = 0; i < 14; i++) { x.globalAlpha = 0.07; G.frame(x, i * 2, i * 2, P.W - i * 4, P.H - i * 4, '#1a0a2a'); G.frame(x, i * 2 + 1, i * 2 + 1, P.W - i * 4 - 2, P.H - i * 4 - 2, '#1a0a2a'); } x.restore(); }
       // skeptic-o-meter
       if (st0.aura && !game.ui.some((w) => w instanceof UI.Dialogue && w.pos === 'top')) {
-        UI.panel(x, P.W - 96, 3, 93, 14, { accent: '#e43b44' });
-        F().draw(x, 'LASSIE-METER', P.W - 92, 7, '#ffb0b0');
+        UI.panel(x, P.W - 98, 3, 95, 14, { accent: '#e43b44' });
+        F().draw(x, 'LASSIE-METER', P.W - 94, 7, '#ffb0b0');
         for (let i = 0; i < 3; i++) G.rect(x, P.W - 25 + i * 7, 6, 5, 8, i < (game.state.skepticism || 0) ? '#e43b44' : '#3a2e70');
       }
       // banner (prompt) — shown when not covered by a top dialogue
       const topDlg = game.ui.some((w) => (w instanceof UI.Dialogue) && w.pos === 'top');
       if (st0.banner && !topDlg && !game.ui.some((w) => w instanceof UI.CaseFile)) {
         const b = st0.banner;
-        const lines = F().wrap(b.text, 220);
+        const lines = F().wrap(b.text, 204);
         const h = 16 + lines.length * 10;
-        UI.panel(x, 4, 3, 226, h, { fill: ['#3a1a5a', '#321650', '#2a1246', '#22103c'], accent: '#fee761' });
+        UI.panel(x, 4, 3, 214, h, { fill: ['#3a1a5a', '#321650', '#2a1246', '#22103c'], accent: '#fee761' });
         F().draw(x, `VISION ${b.n}/${b.total}` + (b.solved ? '  ★' : ''), 10, 7, '#fee761');
         lines.forEach((l, i) => F().draw(x, l, 10, 17 + i * 10, '#ffffff', { shadow: '#0e0a14' }));
       }

@@ -977,6 +977,8 @@
       else if (t === 'chain') { G.hl(x, fx - 1, ny + 2, 3, '#fee761'); G.px(x, fx, ny + 3, '#fee761'); }
       else if (t === 'tooth') { G.hl(x, fx - 1, ny + 1, 3, '#3a2a1a'); G.px(x, fx, ny + 2, '#fff8e0'); G.px(x, fx, ny + 3, '#fff8e0'); }
       else if (t === 'pearls') { G.hl(x, fx - 2, ny + 1, 5, '#fff8f0'); G.px(x, fx, ny + 2, '#fff8f0'); }
+      else if (t === 'sapphire') { G.hl(x, fx - 2, ny + 1, 5, '#fee761'); G.px(x, fx - 1, ny + 2, '#fee761'); G.px(x, fx + 1, ny + 2, '#fee761'); G.rect(x, fx - 1, ny + 3, 3, 2, '#2a5ad8'); G.px(x, fx, ny + 3, '#9ac8ff'); }
+      else if (t === 'watch') { G.line(x, fx - 2, hipY - 6, fx + 2, hipY - 4, '#fee761'); G.px(x, fx + 2, hipY - 3, '#fee761'); }
       else if (t === 'bowtie') { G.px(x, fx - 1, ny, a.color || '#c03040'); G.px(x, fx + 1, ny, a.color || '#c03040'); G.px(x, fx, ny, U.shade(a.color || '#c03040', -0.3)); }
       else if (t === 'whistle') { G.line(x, fx - 1, ny + 1, fx + 1, ny + 5, '#e43b44'); G.px(x, fx + 1, ny + 6, '#c0cbdc'); }
       else if (t === 'scarf') { const c = a.color || '#c040a0'; G.hl(x, fx - 2, ny, 5, c); G.vl(x, fx + 1, ny + 1, 6, c); }

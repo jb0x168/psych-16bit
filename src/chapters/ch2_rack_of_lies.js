@@ -1110,7 +1110,7 @@
 
   P.registerChapter({
     id: 'ch2', number: 2, title: 'RACK OF LIES',
-    tagline: 'A pitmaster drops dead at the Smoke-Off. Watch the other hand.',
+    tagline: 'A pitmaster drops dead. Watch the other hand.',
     pineapple: { scene: 'fair', note: 'In the fruit crate beside the funnel cake stand.' },
     cast, clues, items, gifts, snacks, scenes, revelations, hints, topics, banter, observe,
     where: {

@@ -156,9 +156,8 @@
       L(romanceLabel(gl.romance || 0), 64, '#b04060');
       L('Lassie\'s skepticism:', 80, '#9a8a6a');
       for (let i = 0; i < 3; i++) G.rect(x, X + 104 + i * 9, Y + 80, 7, 7, i < (s.skepticism || 0) ? '#e43b44' : '#c8b47a');
-      L(`Clues: ${s.clues.length}   Snacks this case: ${s.snacks.length}   Total snacks: ${gl.snacks || 0}`, 94);
+      L(`Clues: ${s.clues.length}   Snacks this case: ${s.snacks.length}   Lifetime snacks: ${gl.snacks || 0}`, 94);
       L(`Calls to Dad: ${s.hintsUsed || 0}`, 104);
-      L('Q Shawn-Vision  E/click interact  H call Henry  TAB case file', 116, '#9a8a6a');
     }
   }
   function romanceLabel(r) {

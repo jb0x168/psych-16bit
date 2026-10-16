@@ -331,7 +331,9 @@
     // body accessories
     for (const a of d.acc) {
       const t2 = typeof a === 'string' ? a : a.type;
-      if (t2 === 'pearls') { for (let i = 0; i < 9; i++) { const ang = Math.PI * (0.15 + 0.7 * (i / 8)); G.px(x, 24 + Math.cos(ang) * 7, 43 + Math.sin(ang) * 4, '#fff8f0'); } }
+      if (t2 === 'sapphire') { for (let i = 0; i < 11; i++) { const ang = Math.PI * (0.1 + 0.8 * (i / 10)); G.px(x, 24 + Math.cos(ang) * 8, 43 + Math.sin(ang) * 5, '#fee761'); } G.poly(x, [[21, 48], [28, 48], [29, 51], [24.5, 55], [20, 51]], '#2a5ad8'); G.poly(x, [[22, 49], [25, 49], [23, 52]], '#9ac8ff'); }
+      else if (t2 === 'watch') { G.line(x, 30, 48, 36, 52, '#fee761'); G.circle(x, 37, 53, 2, '#e8c860'); }
+      else if (t2 === 'pearls') { for (let i = 0; i < 9; i++) { const ang = Math.PI * (0.15 + 0.7 * (i / 8)); G.px(x, 24 + Math.cos(ang) * 7, 43 + Math.sin(ang) * 4, '#fff8f0'); } }
       else if (t2 === 'chain') { for (let i = 0; i < 9; i++) { const ang = Math.PI * (0.15 + 0.7 * (i / 8)); G.px(x, 24 + Math.cos(ang) * 6, 44 + Math.sin(ang) * 5, '#fee761'); } G.rect(x, 23, 49, 3, 3, '#fee761'); }
       else if (t2 === 'tooth') { for (let i = 0; i < 9; i++) { const ang = Math.PI * (0.15 + 0.7 * (i / 8)); G.px(x, 24 + Math.cos(ang) * 6, 43 + Math.sin(ang) * 5, '#3a2a1a'); } G.poly(x, [[23, 48], [26, 48], [24.5, 53]], '#fff8e0'); }
       else if (t2 === 'lei') { for (let i = 0; i < 12; i++) { const ang = Math.PI * (0.05 + 0.9 * (i / 11)); G.circle(x, 24 + Math.cos(ang) * 11, 44 + Math.sin(ang) * 6, 1.5, ['#ff6aa0', '#fee761', '#ff9a50'][i % 3]); } }

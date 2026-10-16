@@ -258,6 +258,7 @@
       if (!s) return null;
       let best = null, bd = 1e9;
       for (const o of this.interactables(vision)) {
+        if (o.hs && (o.hs.noFocus || o.hs.walk === null)) continue; // big backdrop hotspots are mouse-only
         const r = o.rect;
         const cx = U.clamp(s.x, r.x, r.x + r.w);
         const target = o.walk || [cx, s.y];

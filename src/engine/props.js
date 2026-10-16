@@ -400,6 +400,26 @@
     if (o.sign) P.font.draw(x, o.sign, X + W / 2, Y - 55, o.signCol || '#ffffff', { align: 'center', shadow: sh(roof, -0.5) });
   };
 
+  /* ---------------- atmosphere ---------------- */
+  // darkness with a soft pool of light around a point (used by dark scenes)
+  let darkC = null;
+  R.darkness = (x, lx, ly, radius = 46, alpha = 0.9, extra = []) => {
+    if (!darkC) darkC = G.canvas(P.W, P.H);
+    const d = darkC.x;
+    d.globalCompositeOperation = 'source-over';
+    d.clearRect(0, 0, P.W, P.H);
+    d.fillStyle = `rgba(6,4,14,${alpha})`; d.fillRect(0, 0, P.W, P.H);
+    d.globalCompositeOperation = 'destination-out';
+    for (const [cx, cy, r] of [[lx, ly, radius]].concat(extra)) {
+      for (let k = 4; k >= 1; k--) { d.fillStyle = `rgba(0,0,0,${0.25 * (5 - k) / 4 + 0.1})`; d.beginPath(); d.arc(Math.round(cx), Math.round(cy), Math.round(r * k / 4 + 4), 0, Math.PI * 2); d.fill(); }
+    }
+    x.drawImage(darkC, 0, 0);
+  };
+  // rain streaks over a rectangle (windows) or the whole screen
+  R.rain = (x, X, Y, W, H, t, col = '#8aa0d0', n = 30) => {
+    for (let i = 0; i < n; i++) { const px = X + ((i * 53 + t * 40) % W), py = Y + ((i * 37 + t * 220) % H); G.line(x, px, py, px - 2, py + 5, col); }
+  };
+
   /* ---------------- icon set (16x16) ---------------- */
   const I = {};
   const ink = '#1d1526';
