@@ -222,7 +222,7 @@
       { id: 'chiefdoor', name: "Chief's Office", x: 290, y: 54, w: 32, h: 68, walk: [306, 140],
         look: async (g) => { await g.say('shawn', "Chief Vick's office. Every time I go in there I come out employed or banned. It's a coin flip."); } },
       { id: 'ldesk', name: "Lassiter's Desk", x: 78, y: 100, w: 56, h: 30, walk: [106, 140],
-        look: async (g) => { await g.say('shawn:smug', 'Is that a pineapple pencil cup? Lassie has a whimsical side.'); await g.say('gus', 'Do not let him hear you call it whimsical.'); } },
+        look: async (g) => { await g.say('shawn:smug', "Lassie's desk. Pencils sharpened to the exact same length. A cactus, because of course. And a framed photo of... his badge."); await g.say('gus', 'Do not let him catch you looking at his badge photo.'); } },
       { id: 'jdesk', name: "Juliet's Desk", x: 166, y: 100, w: 58, h: 30, walk: [194, 140],
         look: async (g) => { await g.say('shawn', "Jules's desk. Neat, organized, smells like vanilla and justice."); await g.say('gus', 'You smelled her desk?'); await g.say('shawn', 'I sensed it, Gus.'); } },
     ],

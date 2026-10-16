@@ -279,20 +279,21 @@
       UI.panel(x, 14, 10, P.W - 28, P.H - 20);
       F().draw(x, 'HOW TO BE A FAKE PSYCHIC', P.W / 2, 17, ACC, { align: 'center' });
       const rows = [
-        ['Walk', 'Arrow keys / WASD, or click the ground'],
-        ['Interact', 'E / Enter / Space, or click (talk, use, enter)'],
-        ['Shawn-Vision', 'Q toggles it. Hidden details sparkle. Right-click observes'],
-        ['Case File', 'Tab / C - clues, items, gifts for Juliet, snacks'],
-        ['Call Dad', 'H - Henry grumbles, then gives you a hint'],
+        ['Walk', 'Arrows / WASD, or click the ground'],
+        ['Interact', 'E / Enter / Space, or click'],
+        ['Shawn-Vision', 'Q or the eye button. Secrets sparkle'],
+        ['Observe', 'Right-click, or interact in Vision'],
+        ['Case File', 'Tab / C: clues, items, gifts, snacks'],
+        ['Call Dad', 'H: Henry grumbles, then hints'],
         ['Skip text', 'Hold Shift'],
-        ['Menu', 'Esc - settings, save & quit'],
+        ['Menu', 'Esc: settings, save & quit'],
         ['', ''],
-        ['Revelations', 'When you have the right clues, tell the police'],
-        ['', 'you are "having a vision". Present the evidence'],
-        ['', 'that proves each point. Wrong picks raise'],
-        ['', 'Lassiter\'s skepticism. Three strikes: try again later.'],
+        ['Visions', 'Got the clues? Tell the police you'],
+        ['', 'are "having a vision", then present'],
+        ['', 'the evidence for each point. Three'],
+        ['', 'wrong picks and Lassie wins. For now.'],
       ];
-      rows.forEach(([a, b], i) => { F().draw(x, a, 24, 32 + i * 10, '#fee761'); F().draw(x, b, 92, 32 + i * 10, '#e8e0ff'); });
+      rows.forEach(([a, b], i) => { F().draw(x, a, 24, 30 + i * 10, '#fee761'); F().draw(x, b, 96, 30 + i * 10, '#e8e0ff'); });
     }
   }
   UI.Help = Help;

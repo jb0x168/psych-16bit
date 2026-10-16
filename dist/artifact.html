@@ -19,11 +19,14 @@ body { display: flex; align-items: center; justify-content: center; }
   cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' shape-rendering='crispEdges'><path d='M1 1h2v2H1zM3 3h2v2H3zM5 5h2v2H5zM1 3h2v6H1zM1 9h2v2H1zM3 1h6v2H3z' fill='%239be564'/><path d='M3 5h2v2H3zM5 3h2v2H5z' fill='%23ffffff'/></svg>") 1 1, auto;
 }
 @media (prefers-reduced-motion: reduce) { #game { box-shadow: none; } }
+#rotate { display: none; position: fixed; left: 0; right: 0; bottom: max(16px, env(safe-area-inset-bottom, 0px)); margin: 0; text-align: center; font: 13px/1.4 ui-monospace, Menlo, Consolas, monospace; color: var(--accent); opacity: 0.8; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+@media (orientation: portrait) and (max-width: 700px) { #rotate { display: block; } }
 
 </style>
 <main id="stage">
   <canvas id="game" width="320" height="180" aria-label="PSYCH 16-bit fan adventure game" tabindex="0"></canvas>
 </main>
+<p id="rotate">Tip: turn your phone sideways for a bigger screen.</p>
 <noscript>This fan game needs JavaScript.</noscript>
 <script>/* src/engine/core.js */
 'use strict';
@@ -3950,20 +3953,21 @@ window.P = window.P || {};
       UI.panel(x, 14, 10, P.W - 28, P.H - 20);
       F().draw(x, 'HOW TO BE A FAKE PSYCHIC', P.W / 2, 17, ACC, { align: 'center' });
       const rows = [
-        ['Walk', 'Arrow keys / WASD, or click the ground'],
-        ['Interact', 'E / Enter / Space, or click (talk, use, enter)'],
-        ['Shawn-Vision', 'Q toggles it. Hidden details sparkle. Right-click observes'],
-        ['Case File', 'Tab / C - clues, items, gifts for Juliet, snacks'],
-        ['Call Dad', 'H - Henry grumbles, then gives you a hint'],
+        ['Walk', 'Arrows / WASD, or click the ground'],
+        ['Interact', 'E / Enter / Space, or click'],
+        ['Shawn-Vision', 'Q or the eye button. Secrets sparkle'],
+        ['Observe', 'Right-click, or interact in Vision'],
+        ['Case File', 'Tab / C: clues, items, gifts, snacks'],
+        ['Call Dad', 'H: Henry grumbles, then hints'],
         ['Skip text', 'Hold Shift'],
-        ['Menu', 'Esc - settings, save & quit'],
+        ['Menu', 'Esc: settings, save & quit'],
         ['', ''],
-        ['Revelations', 'When you have the right clues, tell the police'],
-        ['', 'you are "having a vision". Present the evidence'],
-        ['', 'that proves each point. Wrong picks raise'],
-        ['', 'Lassiter\'s skepticism. Three strikes: try again later.'],
+        ['Visions', 'Got the clues? Tell the police you'],
+        ['', 'are "having a vision", then present'],
+        ['', 'the evidence for each point. Three'],
+        ['', 'wrong picks and Lassie wins. For now.'],
       ];
-      rows.forEach(([a, b], i) => { F().draw(x, a, 24, 32 + i * 10, '#fee761'); F().draw(x, b, 92, 32 + i * 10, '#e8e0ff'); });
+      rows.forEach(([a, b], i) => { F().draw(x, a, 24, 30 + i * 10, '#fee761'); F().draw(x, b, 96, 30 + i * 10, '#e8e0ff'); });
     }
   }
   UI.Help = Help;
@@ -5650,7 +5654,7 @@ window.P = window.P || {};
       { id: 'chiefdoor', name: "Chief's Office", x: 290, y: 54, w: 32, h: 68, walk: [306, 140],
         look: async (g) => { await g.say('shawn', "Chief Vick's office. Every time I go in there I come out employed or banned. It's a coin flip."); } },
       { id: 'ldesk', name: "Lassiter's Desk", x: 78, y: 100, w: 56, h: 30, walk: [106, 140],
-        look: async (g) => { await g.say('shawn:smug', 'Is that a pineapple pencil cup? Lassie has a whimsical side.'); await g.say('gus', 'Do not let him hear you call it whimsical.'); } },
+        look: async (g) => { await g.say('shawn:smug', "Lassie's desk. Pencils sharpened to the exact same length. A cactus, because of course. And a framed photo of... his badge."); await g.say('gus', 'Do not let him catch you looking at his badge photo.'); } },
       { id: 'jdesk', name: "Juliet's Desk", x: 166, y: 100, w: 58, h: 30, walk: [194, 140],
         look: async (g) => { await g.say('shawn', "Jules's desk. Neat, organized, smells like vanilla and justice."); await g.say('gus', 'You smelled her desk?'); await g.say('shawn', 'I sensed it, Gus.'); } },
     ],
