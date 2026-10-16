@@ -391,13 +391,13 @@
     G.rect(x, X + 1, Y - 22, 20, 5, sh(col, -0.2)); G.px(x, X + 6, Y - 21, '#e43b44'); G.px(x, X + 11, Y - 20, '#fee761'); G.px(x, X + 14, Y - 20, '#2ce8f5');
     G.rect(x, X + 7, Y - 10, 8, 4, '#2a2a34'); G.px(x, X + 10, Y - 9, '#fee761');
   };
-  R.stand = (x, X, Y, W = 60, o = {}) => { // food stand / shack
-    const col = o.col || '#f4e4c0', roof = o.roof || '#3ab0a0';
-    R.siding(x, X, Y - 40, W, 40, col);
-    G.rect(x, X + 4, Y - 34, W - 8, 16, '#2a2028'); G.rect(x, X + 2, Y - 18, W - 4, 4, sh(col, -0.25)); G.hl(x, X + 2, Y - 18, W - 4, sh(col, 0.2));
-    for (let i = 0; i < W + 8; i += 8) G.poly(x, [[X - 4 + i, Y - 46], [X + 4 + i, Y - 46], [X + 4 + i, Y - 40], [X + i, Y - 37], [X - 4 + i, Y - 40]], (i / 8) % 2 ? roof : '#ffffff');
-    G.rect(x, X - 4, Y - 58, W + 8, 12, roof); G.hl(x, X - 4, Y - 58, W + 8, sh(roof, 0.3));
-    if (o.sign) P.font.draw(x, o.sign, X + W / 2, Y - 55, o.signCol || '#ffffff', { align: 'center', shadow: sh(roof, -0.5) });
+  R.stand = (x, X, Y, W = 60, o = {}) => { // food stand / shack; o.h = body height (default 40)
+    const col = o.col || '#f4e4c0', roof = o.roof || '#3ab0a0', h = o.h || 40;
+    R.siding(x, X, Y - h, W, h, col);
+    G.rect(x, X + 4, Y - h + 6, W - 8, h - 24, '#2a2028'); G.rect(x, X + 2, Y - 18, W - 4, 4, sh(col, -0.25)); G.hl(x, X + 2, Y - 18, W - 4, sh(col, 0.2));
+    for (let i = 0; i < W + 8; i += 8) G.poly(x, [[X - 4 + i, Y - h - 6], [X + 4 + i, Y - h - 6], [X + 4 + i, Y - h], [X + i, Y - h + 3], [X - 4 + i, Y - h]], (i / 8) % 2 ? roof : '#ffffff');
+    G.rect(x, X - 4, Y - h - 18, W + 8, 12, roof); G.hl(x, X - 4, Y - h - 18, W + 8, sh(roof, 0.3));
+    if (o.sign) P.font.draw(x, o.sign, X + W / 2, Y - h - 15, o.signCol || '#ffffff', { align: 'center', shadow: sh(roof, -0.5) });
   };
 
   /* ---------------- atmosphere ---------------- */

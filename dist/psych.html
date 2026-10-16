@@ -2917,13 +2917,13 @@ window.P = window.P || {};
     G.rect(x, X + 1, Y - 22, 20, 5, sh(col, -0.2)); G.px(x, X + 6, Y - 21, '#e43b44'); G.px(x, X + 11, Y - 20, '#fee761'); G.px(x, X + 14, Y - 20, '#2ce8f5');
     G.rect(x, X + 7, Y - 10, 8, 4, '#2a2a34'); G.px(x, X + 10, Y - 9, '#fee761');
   };
-  R.stand = (x, X, Y, W = 60, o = {}) => { // food stand / shack
-    const col = o.col || '#f4e4c0', roof = o.roof || '#3ab0a0';
-    R.siding(x, X, Y - 40, W, 40, col);
-    G.rect(x, X + 4, Y - 34, W - 8, 16, '#2a2028'); G.rect(x, X + 2, Y - 18, W - 4, 4, sh(col, -0.25)); G.hl(x, X + 2, Y - 18, W - 4, sh(col, 0.2));
-    for (let i = 0; i < W + 8; i += 8) G.poly(x, [[X - 4 + i, Y - 46], [X + 4 + i, Y - 46], [X + 4 + i, Y - 40], [X + i, Y - 37], [X - 4 + i, Y - 40]], (i / 8) % 2 ? roof : '#ffffff');
-    G.rect(x, X - 4, Y - 58, W + 8, 12, roof); G.hl(x, X - 4, Y - 58, W + 8, sh(roof, 0.3));
-    if (o.sign) P.font.draw(x, o.sign, X + W / 2, Y - 55, o.signCol || '#ffffff', { align: 'center', shadow: sh(roof, -0.5) });
+  R.stand = (x, X, Y, W = 60, o = {}) => { // food stand / shack; o.h = body height (default 40)
+    const col = o.col || '#f4e4c0', roof = o.roof || '#3ab0a0', h = o.h || 40;
+    R.siding(x, X, Y - h, W, h, col);
+    G.rect(x, X + 4, Y - h + 6, W - 8, h - 24, '#2a2028'); G.rect(x, X + 2, Y - 18, W - 4, 4, sh(col, -0.25)); G.hl(x, X + 2, Y - 18, W - 4, sh(col, 0.2));
+    for (let i = 0; i < W + 8; i += 8) G.poly(x, [[X - 4 + i, Y - h - 6], [X + 4 + i, Y - h - 6], [X + 4 + i, Y - h], [X + i, Y - h + 3], [X - 4 + i, Y - h]], (i / 8) % 2 ? roof : '#ffffff');
+    G.rect(x, X - 4, Y - h - 18, W + 8, 12, roof); G.hl(x, X - 4, Y - h - 18, W + 8, sh(roof, 0.3));
+    if (o.sign) P.font.draw(x, o.sign, X + W / 2, Y - h - 15, o.signCol || '#ffffff', { align: 'center', shadow: sh(roof, -0.5) });
   };
 
   /* ---------------- atmosphere ---------------- */
@@ -6089,12 +6089,12 @@ window.P = window.P || {};
       G.rect(x, 404, 92, 2, 36, '#8a6a4a'); G.rect(x, 442, 92, 2, 36, '#8a6a4a'); G.rect(x, 404, 104, 40, 2, '#8a6a4a');
       [['#ff6a4a', '#fff8e0'], ['#2a8ad8', '#fee761'], ['#63c74d', '#ffffff'], ['#fee761', '#e43b44'], ['#f4f4f4', '#2a8ad8']].forEach(([c, s2], i) => R.surfboard(x, 408 + i * 8, 126, 36 - (i % 2) * 4, c, s2));
       // Auntie Leilani's shave ice stand (+ the pineapple, proudly on the sign)
-      R.stand(x, 452, 128, 74, { roof: '#3ab0a0', sign: 'SHAVE ICE', col: '#f4e4c0' });
-      R.pineapple(x, 516, 74, 2);
-      P.font.draw(x, "AUNTIE LEILANI'S", 489, 60, '#ffffff', { align: 'center', shadow: '#1a6a60' });
+      R.stand(x, 452, 128, 74, { roof: '#3ab0a0', sign: 'SHAVE ICE', col: '#f4e4c0', h: 56 });
+      R.pineapple(x, 520, 54, 2);
+      P.font.draw(x, "AUNTIE LEILANI'S", 489, 44, '#ffffff', { align: 'center', shadow: '#1a6a60' });
       if (!open) {
-        for (let yy = 94; yy < 110; yy += 2) G.hl(x, 456, yy, 66, yy % 4 ? '#a8a8b4' : '#8a8a98');
-        R.sign(x, 470, 98, 38, 10, 'CLOSED', { bg: '#e43b44', fg: '#ffffff' });
+        for (let yy = 78; yy < 110; yy += 2) G.hl(x, 456, yy, 66, yy % 4 ? '#a8a8b4' : '#8a8a98');
+        R.sign(x, 470, 84, 38, 10, 'CLOSED', { bg: '#e43b44', fg: '#ffffff' });
       } else {
         // syrup bottles + ice machine
         for (let i = 0; i < 6; i++) G.rect(x, 460 + i * 6, 98, 3, 8, ['#ff4a6a', '#2ac8ff', '#fee761', '#63c74d', '#ff9a3c', '#b55088'][i]);
@@ -7474,8 +7474,8 @@ window.P = window.P || {};
       G.rect(x, 316, 66, 22, 14, '#ffffff'); G.rect(x, 316, 66, 8, 14, '#2a3a8a'); G.rect(x, 324, 73, 14, 7, '#c83a3a'); G.px(x, 319, 72, '#ffffff');
       G.rect(x, 346, 92, 28, 20, '#8a2a2a'); G.ellipse(x, 360, 92, 14, 3, '#aa3a3a'); G.rect(x, 366, 70, 3, 22, '#3a3a40');
       // Odessa's sweet tea stand
-      R.stand(x, 396, 126, 72, { roof: '#e8a030', sign: sign ? 'SWEET TEA' : '', col: '#fff4d8' });
-      if (!sign) { G.rect(x, 408, 70, 48, 10, '#e8a030'); G.poly(x, [[440, 70], [456, 70], [456, 80], [446, 78]], '#3a2a1a'); }
+      R.stand(x, 396, 126, 72, { roof: '#e8a030', sign: sign ? 'SWEET TEA' : '', col: '#fff4d8', h: 54 });
+      if (!sign) { G.rect(x, 408, 56, 48, 10, '#e8a030'); G.poly(x, [[440, 56], [456, 56], [456, 66], [446, 64]], '#3a2a1a'); }
       for (let i = 0; i < 3; i++) { G.rect(x, 406 + i * 18, 92, 12, 16, '#e8b050'); G.frame(x, 406 + i * 18, 92, 12, 16, '#c8d8e8'); G.rect(x, 408 + i * 18, 96, 8, 10, '#c87a2a'); }
       // recycling bin
       G.rect(x, 474, 108, 14, 20, '#2a6ab0'); G.hl(x, 473, 107, 16, '#4a8ad0'); G.px(x, 480, 116, '#ffffff'); G.px(x, 481, 117, '#ffffff');

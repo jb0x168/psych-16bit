@@ -260,8 +260,8 @@
       G.rect(x, 316, 66, 22, 14, '#ffffff'); G.rect(x, 316, 66, 8, 14, '#2a3a8a'); G.rect(x, 324, 73, 14, 7, '#c83a3a'); G.px(x, 319, 72, '#ffffff');
       G.rect(x, 346, 92, 28, 20, '#8a2a2a'); G.ellipse(x, 360, 92, 14, 3, '#aa3a3a'); G.rect(x, 366, 70, 3, 22, '#3a3a40');
       // Odessa's sweet tea stand
-      R.stand(x, 396, 126, 72, { roof: '#e8a030', sign: sign ? 'SWEET TEA' : '', col: '#fff4d8' });
-      if (!sign) { G.rect(x, 408, 70, 48, 10, '#e8a030'); G.poly(x, [[440, 70], [456, 70], [456, 80], [446, 78]], '#3a2a1a'); }
+      R.stand(x, 396, 126, 72, { roof: '#e8a030', sign: sign ? 'SWEET TEA' : '', col: '#fff4d8', h: 54 });
+      if (!sign) { G.rect(x, 408, 56, 48, 10, '#e8a030'); G.poly(x, [[440, 56], [456, 56], [456, 66], [446, 64]], '#3a2a1a'); }
       for (let i = 0; i < 3; i++) { G.rect(x, 406 + i * 18, 92, 12, 16, '#e8b050'); G.frame(x, 406 + i * 18, 92, 12, 16, '#c8d8e8'); G.rect(x, 408 + i * 18, 96, 8, 10, '#c87a2a'); }
       // recycling bin
       G.rect(x, 474, 108, 14, 20, '#2a6ab0'); G.hl(x, 473, 107, 16, '#4a8ad0'); G.px(x, 480, 116, '#ffffff'); G.px(x, 481, 117, '#ffffff');

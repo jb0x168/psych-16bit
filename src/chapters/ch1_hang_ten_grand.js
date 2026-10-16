@@ -224,12 +224,12 @@
       G.rect(x, 404, 92, 2, 36, '#8a6a4a'); G.rect(x, 442, 92, 2, 36, '#8a6a4a'); G.rect(x, 404, 104, 40, 2, '#8a6a4a');
       [['#ff6a4a', '#fff8e0'], ['#2a8ad8', '#fee761'], ['#63c74d', '#ffffff'], ['#fee761', '#e43b44'], ['#f4f4f4', '#2a8ad8']].forEach(([c, s2], i) => R.surfboard(x, 408 + i * 8, 126, 36 - (i % 2) * 4, c, s2));
       // Auntie Leilani's shave ice stand (+ the pineapple, proudly on the sign)
-      R.stand(x, 452, 128, 74, { roof: '#3ab0a0', sign: 'SHAVE ICE', col: '#f4e4c0' });
-      R.pineapple(x, 516, 74, 2);
-      P.font.draw(x, "AUNTIE LEILANI'S", 489, 60, '#ffffff', { align: 'center', shadow: '#1a6a60' });
+      R.stand(x, 452, 128, 74, { roof: '#3ab0a0', sign: 'SHAVE ICE', col: '#f4e4c0', h: 56 });
+      R.pineapple(x, 520, 54, 2);
+      P.font.draw(x, "AUNTIE LEILANI'S", 489, 44, '#ffffff', { align: 'center', shadow: '#1a6a60' });
       if (!open) {
-        for (let yy = 94; yy < 110; yy += 2) G.hl(x, 456, yy, 66, yy % 4 ? '#a8a8b4' : '#8a8a98');
-        R.sign(x, 470, 98, 38, 10, 'CLOSED', { bg: '#e43b44', fg: '#ffffff' });
+        for (let yy = 78; yy < 110; yy += 2) G.hl(x, 456, yy, 66, yy % 4 ? '#a8a8b4' : '#8a8a98');
+        R.sign(x, 470, 84, 38, 10, 'CLOSED', { bg: '#e43b44', fg: '#ffffff' });
       } else {
         // syrup bottles + ice machine
         for (let i = 0; i < 6; i++) G.rect(x, 460 + i * 6, 98, 3, 8, ['#ff4a6a', '#2ac8ff', '#fee761', '#63c74d', '#ff9a3c', '#b55088'][i]);
