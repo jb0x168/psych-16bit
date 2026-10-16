@@ -1,7 +1,8 @@
 #!/bin/sh
-# Dev helper: run a python tool with the job-local Playwright install.
-# usage: tools/run.sh smoke.py OUTDIR "js" ...
-export PLAYWRIGHT_BROWSERS_PATH="${PLAYWRIGHT_BROWSERS_PATH:-/Users/proteus/.claude/jobs/39d3bc65/tmp/pw-browsers}"
-PY="${PLAYWRIGHT_PY:-/Users/proteus/.claude/jobs/39d3bc65/tmp/venv/bin/python}"
+# Dev helper: run a python tool from tools/ with Playwright available.
+# usage: tools/run.sh playtest.py ch1
+# Set PLAYWRIGHT_PY to a python that has playwright installed (default: python3),
+# and optionally PLAYWRIGHT_BROWSERS_PATH if your browsers live somewhere custom.
+PY="${PLAYWRIGHT_PY:-python3}"
 script="$1"; shift
 exec "$PY" "$(dirname "$0")/$script" "$@"
