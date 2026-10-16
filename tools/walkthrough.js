@@ -299,6 +299,22 @@
     T.expect(T.flag('jules_umbrella'), 'umbrella moment');
   };
 
+  T.example = async () => {
+    await new Promise((res) => { const sc = document.createElement('script'); sc.src = 'src/chapters/_template.js'; sc.onload = res; document.body.appendChild(sc); });
+    await T.start('example', ['DONUTS']);
+    T.expect(P.game.scene.id === 'donutshop', 'template: in the shop');
+    await T.act('dot', 'use', ['What happened', 'coffee']);
+    await T.act('chip', 'use', ['__present'], ['coffee']);
+    T.expect(T.hasClue('chip_route'), 'template: Chip talks');
+    await T.act('backdoor', 'look'); await T.act('backdoor', 'use'); await T.act('van', 'look');
+    await T.act('case', 'use'); await T.act('keychain', 'look');
+    await T.act('chip', 'use', []);
+    T.expect(T.flag('ready'), 'template: Vick called');
+    await T.act('vick', 'use', [], ['flour_print', 'recipe_card']);
+    await T.idle(30000);
+    T.expect(P.game.mode.constructor.name === 'Complete', 'template: case closed');
+  };
+
   T.run = async (name) => {
     try { await T[name](); } catch (e) { T.fail('exception: ' + (e && e.stack || e)); }
     return { errors: T.errors, log: T.log };

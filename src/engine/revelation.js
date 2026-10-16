@@ -50,7 +50,7 @@
         for (;;) {
           st0.banner = { text: step.prompt, n: i + 1, total: rev.steps.length, t: 0 };
           if (step.lead) await g.say(step.leadWho || 'shawn:psychic', step.lead);
-          const pick = await g.pick(step.kinds || ['clues', 'items'], step.short || 'Which clue proves it?');
+          const pick = await g.pick(step.kinds || ['clues', 'items'], step.short || 'PRESENT EVIDENCE', step.prompt);
           if (!pick) {
             st0.banner = null;
             await g.say('shawn:worried', "Hold on. The spirits put me on hold. I'm getting smooth jazz.");

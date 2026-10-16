@@ -250,7 +250,7 @@
     pick(mx, my, vision) {
       const wx = mx + this.camX;
       const list = this.interactables(vision).filter((o) => U.inRect(wx, my, o.rect));
-      list.sort((a, b) => b.depth - a.depth);
+      list.sort((a, b) => (a.id === 'gus') - (b.id === 'gus') || b.depth - a.depth); // Gus never steals a click
       return list[0] || null;
     }
     nearest(vision) {
@@ -268,6 +268,7 @@
         // must roughly face it
         const facing = (cx - s.x) * s.face >= -6;
         if (!facing) d += 30;
+        if (o.id === 'gus') d += 14;
         if (d < 34 && d < bd) { bd = d; best = o; }
       }
       return best;

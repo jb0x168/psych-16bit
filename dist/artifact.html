@@ -1,4 +1,4 @@
-<title>PSYCH: The Spirits Are Speaking</title>
+<title>The Spirits Are Speaking</title>
 <style>
 :root {
   --bg: #0e0a14;
@@ -3272,7 +3272,7 @@ window.P = window.P || {};
     pick(mx, my, vision) {
       const wx = mx + this.camX;
       const list = this.interactables(vision).filter((o) => U.inRect(wx, my, o.rect));
-      list.sort((a, b) => b.depth - a.depth);
+      list.sort((a, b) => (a.id === 'gus') - (b.id === 'gus') || b.depth - a.depth); // Gus never steals a click
       return list[0] || null;
     }
     nearest(vision) {
@@ -3290,6 +3290,7 @@ window.P = window.P || {};
         // must roughly face it
         const facing = (cx - s.x) * s.face >= -6;
         if (!facing) d += 30;
+        if (o.id === 'gus') d += 14;
         if (d < 34 && d < bd) { bd = d; best = o; }
       }
       return best;
@@ -3691,6 +3692,8 @@ window.P = window.P || {};
       this.tabs = o.kinds || ['clues', 'items', 'gifts', 'snacks', 'notes'];
       this.tab = 0; this.sel = 0; this.scroll = 0;
       this.lastTab = -1;
+      this.qLines = o.question ? F().wrap(o.question, 280).slice(0, 2) : [];
+      this.qOff = this.qLines.length ? 6 + this.qLines.length * 9 : 0;
       P.audio.sfx('page');
       if (P.debugAuto && this.pick) this.autoT = 0;
     }
@@ -3734,7 +3737,7 @@ window.P = window.P || {};
         }
         // grid
         for (let i = 0; i < Math.min(24, list.length - this.scroll * cols); i++) {
-          const gx = X + 10 + (i % cols) * 21, gy = Y + 26 + Math.floor(i / cols) * 21;
+          const gx = X + 10 + (i % cols) * 21, gy = Y + 26 + this.qOff + Math.floor(i / cols) * 21;
           if (UI.mouseIn(gx, gy, 20, 20)) {
             if (this.sel !== i + this.scroll * cols) { this.sel = i + this.scroll * cols; if (!I().clicked) P.audio.sfx('select'); }
             if (I().clicked && this.pick && this.dbl === this.sel && this.t - this.dblT < 0.45) { this.present(list); return; }
@@ -3747,7 +3750,7 @@ window.P = window.P || {};
           if (UI.mouseIn(this.pick ? 250 : 256, 150, 50, 14)) { P.audio.sfx('cancel'); this.close(null); return; }
         }
       }
-      this.scroll = Math.max(0, Math.floor(this.sel / cols) - 3);
+      this.scroll = Math.max(0, Math.floor(this.sel / cols) - (this.qOff ? 2 : 3));
       if (this.pick && I().pressed('confirm')) this.present(list);
     }
     present(list) {
@@ -3775,6 +3778,10 @@ window.P = window.P || {};
       }
       if (this.o.prompt) F().draw(x, this.o.prompt, X + W - 8, Y + 9, '#feae34', { align: 'right', shadow: '#0e0a14' });
       else F().draw(x, 'CASE FILE', X + W - 8, Y + 9, '#feae34', { align: 'right' });
+      if (this.qLines.length) {
+        G.rect(x, X + 6, Y + 22, W - 12, this.qOff, '#3a1a5a'); G.hl(x, X + 6, Y + 22, W - 12, '#fee761');
+        this.qLines.forEach((l, i) => F().draw(x, l, X + 10, Y + 25 + i * 9, '#ffffff'));
+      }
       const kind = this.tabs[this.tab];
       if (kind === 'notes') { this.drawNotes(x, X + 12, Y + 28); this.drawButtons(x); return; }
       const list = this.entries(kind);
@@ -3783,9 +3790,10 @@ window.P = window.P || {};
         const lines = F().wrap(TABS[kind].empty, 250);
         lines.forEach((l, i) => F().draw(x, l, X + 14, Y + 34 + i * 10, '#6a5a2a'));
       }
-      for (let i = 0; i < 24; i++) {
+      const rowsVis = this.qOff ? 3 : 4;
+      for (let i = 0; i < rowsVis * cols; i++) {
         const idx = i + this.scroll * cols;
-        const gx = X + 10 + (i % cols) * 21, gy = Y + 26 + Math.floor(i / cols) * 21;
+        const gx = X + 10 + (i % cols) * 21, gy = Y + 26 + this.qOff + Math.floor(i / cols) * 21;
         G.rect(x, gx, gy, 20, 20, '#e0cc90'); G.frame(x, gx, gy, 20, 20, '#c8b47a');
         const e = list[idx];
         if (!e) continue;
@@ -3795,9 +3803,9 @@ window.P = window.P || {};
       }
       // details
       const e = list[this.sel];
-      const dx = X + 140, dy = Y + 26, dw = W - 150;
-      G.rect(x, dx, dy, dw, 116, '#fff6d0'); G.frame(x, dx, dy, dw, 116, '#c8b47a');
-      for (let ly = dy + 14; ly < dy + 114; ly += 10) G.hl(x, dx + 2, ly + 8, dw - 4, '#e8d8b0');
+      const dx = X + 140, dy = Y + 26 + this.qOff, dw = W - 150, dh = 116 - this.qOff;
+      G.rect(x, dx, dy, dw, dh, '#fff6d0'); G.frame(x, dx, dy, dw, dh, '#c8b47a');
+      for (let ly = dy + 14; ly < dy + dh - 2; ly += 10) G.hl(x, dx + 2, ly + 8, dw - 4, '#e8d8b0');
       if (e) {
         const big = P.icon(e.icon || 'note');
         x.drawImage(big, dx + 4, dy + 4, 36, 36);
@@ -3805,7 +3813,7 @@ window.P = window.P || {};
         nameLines.forEach((l, i) => F().draw(x, l, dx + 44, dy + 6 + i * 10, '#7a2a1a'));
         if (e.kind === 'clues') F().draw(x, e.from ? 'via ' + e.from : 'evidence', dx + 44, dy + 8 + nameLines.length * 10, '#9a8a6a');
         const lines = F().wrap(e.desc || '', dw - 10);
-        lines.slice(0, 7).forEach((l, i) => F().draw(x, l, dx + 5, dy + 44 + i * 10, '#3a2a10'));
+        lines.slice(0, this.qOff ? 5 : 7).forEach((l, i) => F().draw(x, l, dx + 5, dy + 44 + i * 10, '#3a2a10'));
       }
       this.drawButtons(x);
     }
@@ -4111,7 +4119,7 @@ window.P = window.P || {};
       await this.wait(500);
       if (def.after) await def.after(this);
     }
-    async pick(kinds, prompt) { return this.game.push(new UI.CaseFile(this.game, { pick: true, kinds, prompt })).promise; }
+    async pick(kinds, prompt, question) { return this.game.push(new UI.CaseFile(this.game, { pick: true, kinds, prompt, question })).promise; }
     objective(text) {
       if (this.s.objective === text) return;
       this.s.objective = text;
@@ -4297,7 +4305,7 @@ window.P = window.P || {};
         for (;;) {
           st0.banner = { text: step.prompt, n: i + 1, total: rev.steps.length, t: 0 };
           if (step.lead) await g.say(step.leadWho || 'shawn:psychic', step.lead);
-          const pick = await g.pick(step.kinds || ['clues', 'items'], step.short || 'Which clue proves it?');
+          const pick = await g.pick(step.kinds || ['clues', 'items'], step.short || 'PRESENT EVIDENCE', step.prompt);
           if (!pick) {
             st0.banner = null;
             await g.say('shawn:worried', "Hold on. The spirits put me on hold. I'm getting smooth jazz.");

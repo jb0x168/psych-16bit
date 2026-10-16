@@ -21,6 +21,8 @@
       this.tabs = o.kinds || ['clues', 'items', 'gifts', 'snacks', 'notes'];
       this.tab = 0; this.sel = 0; this.scroll = 0;
       this.lastTab = -1;
+      this.qLines = o.question ? F().wrap(o.question, 280).slice(0, 2) : [];
+      this.qOff = this.qLines.length ? 6 + this.qLines.length * 9 : 0;
       P.audio.sfx('page');
       if (P.debugAuto && this.pick) this.autoT = 0;
     }
@@ -64,7 +66,7 @@
         }
         // grid
         for (let i = 0; i < Math.min(24, list.length - this.scroll * cols); i++) {
-          const gx = X + 10 + (i % cols) * 21, gy = Y + 26 + Math.floor(i / cols) * 21;
+          const gx = X + 10 + (i % cols) * 21, gy = Y + 26 + this.qOff + Math.floor(i / cols) * 21;
           if (UI.mouseIn(gx, gy, 20, 20)) {
             if (this.sel !== i + this.scroll * cols) { this.sel = i + this.scroll * cols; if (!I().clicked) P.audio.sfx('select'); }
             if (I().clicked && this.pick && this.dbl === this.sel && this.t - this.dblT < 0.45) { this.present(list); return; }
@@ -77,7 +79,7 @@
           if (UI.mouseIn(this.pick ? 250 : 256, 150, 50, 14)) { P.audio.sfx('cancel'); this.close(null); return; }
         }
       }
-      this.scroll = Math.max(0, Math.floor(this.sel / cols) - 3);
+      this.scroll = Math.max(0, Math.floor(this.sel / cols) - (this.qOff ? 2 : 3));
       if (this.pick && I().pressed('confirm')) this.present(list);
     }
     present(list) {
@@ -105,6 +107,10 @@
       }
       if (this.o.prompt) F().draw(x, this.o.prompt, X + W - 8, Y + 9, '#feae34', { align: 'right', shadow: '#0e0a14' });
       else F().draw(x, 'CASE FILE', X + W - 8, Y + 9, '#feae34', { align: 'right' });
+      if (this.qLines.length) {
+        G.rect(x, X + 6, Y + 22, W - 12, this.qOff, '#3a1a5a'); G.hl(x, X + 6, Y + 22, W - 12, '#fee761');
+        this.qLines.forEach((l, i) => F().draw(x, l, X + 10, Y + 25 + i * 9, '#ffffff'));
+      }
       const kind = this.tabs[this.tab];
       if (kind === 'notes') { this.drawNotes(x, X + 12, Y + 28); this.drawButtons(x); return; }
       const list = this.entries(kind);
@@ -113,9 +119,10 @@
         const lines = F().wrap(TABS[kind].empty, 250);
         lines.forEach((l, i) => F().draw(x, l, X + 14, Y + 34 + i * 10, '#6a5a2a'));
       }
-      for (let i = 0; i < 24; i++) {
+      const rowsVis = this.qOff ? 3 : 4;
+      for (let i = 0; i < rowsVis * cols; i++) {
         const idx = i + this.scroll * cols;
-        const gx = X + 10 + (i % cols) * 21, gy = Y + 26 + Math.floor(i / cols) * 21;
+        const gx = X + 10 + (i % cols) * 21, gy = Y + 26 + this.qOff + Math.floor(i / cols) * 21;
         G.rect(x, gx, gy, 20, 20, '#e0cc90'); G.frame(x, gx, gy, 20, 20, '#c8b47a');
         const e = list[idx];
         if (!e) continue;
@@ -125,9 +132,9 @@
       }
       // details
       const e = list[this.sel];
-      const dx = X + 140, dy = Y + 26, dw = W - 150;
-      G.rect(x, dx, dy, dw, 116, '#fff6d0'); G.frame(x, dx, dy, dw, 116, '#c8b47a');
-      for (let ly = dy + 14; ly < dy + 114; ly += 10) G.hl(x, dx + 2, ly + 8, dw - 4, '#e8d8b0');
+      const dx = X + 140, dy = Y + 26 + this.qOff, dw = W - 150, dh = 116 - this.qOff;
+      G.rect(x, dx, dy, dw, dh, '#fff6d0'); G.frame(x, dx, dy, dw, dh, '#c8b47a');
+      for (let ly = dy + 14; ly < dy + dh - 2; ly += 10) G.hl(x, dx + 2, ly + 8, dw - 4, '#e8d8b0');
       if (e) {
         const big = P.icon(e.icon || 'note');
         x.drawImage(big, dx + 4, dy + 4, 36, 36);
@@ -135,7 +142,7 @@
         nameLines.forEach((l, i) => F().draw(x, l, dx + 44, dy + 6 + i * 10, '#7a2a1a'));
         if (e.kind === 'clues') F().draw(x, e.from ? 'via ' + e.from : 'evidence', dx + 44, dy + 8 + nameLines.length * 10, '#9a8a6a');
         const lines = F().wrap(e.desc || '', dw - 10);
-        lines.slice(0, 7).forEach((l, i) => F().draw(x, l, dx + 5, dy + 44 + i * 10, '#3a2a10'));
+        lines.slice(0, this.qOff ? 5 : 7).forEach((l, i) => F().draw(x, l, dx + 5, dy + 44 + i * 10, '#3a2a10'));
       }
       this.drawButtons(x);
     }

@@ -146,7 +146,7 @@
       await this.wait(500);
       if (def.after) await def.after(this);
     }
-    async pick(kinds, prompt) { return this.game.push(new UI.CaseFile(this.game, { pick: true, kinds, prompt })).promise; }
+    async pick(kinds, prompt, question) { return this.game.push(new UI.CaseFile(this.game, { pick: true, kinds, prompt, question })).promise; }
     objective(text) {
       if (this.s.objective === text) return;
       this.s.objective = text;
